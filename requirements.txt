@@ -14,5 +14,8 @@ PyICU
 pycld2
 colorama
 pyyaml
-python-Levenshtein
+python-Levenshtein==0.12.2
 pytest
+protobuf
+werkzeug==0.16.1
+flask-wtf
