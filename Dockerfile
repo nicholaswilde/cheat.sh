@@ -1,20 +1,19 @@
-FROM alpine:3.14
-# fetching cheat sheets
-## installing dependencies
+FROM alpine:3.14 AS builder
+# FROM python:alpine AS builder
+# https://rodneyosodo.medium.com/minimizing-python-docker-images-cf99f4468d39
 RUN apk add --update --no-cache \
   git \
+  sed \
+  libstdc++ \
+  pkgconf \
+  py3-icu \
   py3-six \
   py3-pygments \
   py3-yaml \
   py3-gevent \
-  libstdc++ \
   py3-colorama \
   py3-requests \
-  py3-icu \
-  py3-redis \
-  sed
-
-# install pycld2 manually direct from GH
+  py3-redis
 
 ## copying
 WORKDIR /app
