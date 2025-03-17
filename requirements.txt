@@ -11,7 +11,7 @@ langdetect
 cffi
 polyglot
 PyICU
-pycld2
+# pycld2
 colorama
 pyyaml
 python-Levenshtein==0.12.2

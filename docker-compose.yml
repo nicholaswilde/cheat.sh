@@ -12,7 +12,8 @@ services:
       - "8002:8002"
     volumes:
       - .:/app:Z
-      - ./cheat.sheets:/root/.cheat.sh/upstream/cheat.sheets
+      # - ./upstream:/root/.cheat.sh/upstream/
+    restart: always
   redis:
     image: redis:4-alpine
     volumes:

@@ -14,6 +14,8 @@ RUN apk add --update --no-cache \
   py3-redis \
   sed
 
+# install pycld2 manually direct from GH
+
 ## copying
 WORKDIR /app
 COPY . /app
@@ -22,6 +24,7 @@ COPY . /app
 RUN apk add --no-cache --virtual build-deps py3-pip g++ python3-dev libffi-dev \
   && pip3 install --no-cache-dir --upgrade pygments \
   && pip3 install --no-cache-dir -r requirements.txt \
+  && pip3 install --no-cache-dir git+https://github.com/aboSamoor/pycld2.git \
   && apk del build-deps
 
 # fetching dependencies
@@ -30,6 +33,6 @@ RUN mkdir -p /root/.cheat.sh/log/ \
 
 # installing server dependencies
 RUN apk add --update --no-cache py3-jinja2 py3-flask bash gawk
-# VOLUME ["/root/.cheat.sh/upstream/cheat.sheets"]
+VOLUME ["/root/.cheat.sh/upstream/"]
 ENTRYPOINT ["python3", "-u", "bin/srv.py"]
 CMD [""]

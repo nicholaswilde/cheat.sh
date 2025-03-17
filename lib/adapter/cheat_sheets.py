@@ -44,7 +44,7 @@ class CheatSheets(GitRepositoryAdapter):
 
     _adapter_name = "cheat.sheets"
     _output_format = "code"
-    _repository_url = "https://github.com/chubin/cheat.sheets"
+    _repository_url = "https://github.com/nicholaswilde/cheat.sheets"
     _cheatsheet_files_prefix = "sheets/"
 
     def _get_list(self, prefix=None):
