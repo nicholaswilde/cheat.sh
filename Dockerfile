@@ -26,12 +26,22 @@ RUN apk add --no-cache --virtual build-deps py3-pip g++ python3-dev libffi-dev \
   && pip3 install --no-cache-dir git+https://github.com/aboSamoor/pycld2.git \
   && apk del build-deps
 
-# fetching dependencies
-RUN mkdir -p /root/.cheat.sh/log/ \
-    && python3 lib/fetch.py fetch-all
+RUN mkdir -p /root/.cheat.sh/log/
 
-# installing server dependencies
-RUN apk add --update --no-cache py3-jinja2 py3-flask bash gawk
-VOLUME ["/root/.cheat.sh/upstream/"]
-ENTRYPOINT ["python3", "-u", "bin/srv.py"]
+# FROM python:3.13.2-alpine3.21
+# WORKDIR /app
+# COPY --from=builder /app /app
+# COPY --from=builder /root/.cheat.sh /root/.cheat.sh
+
+# Install server dependencies
+RUN apk add --update --no-cache \
+  py3-jinja2 \
+  py3-flask \
+  bash \
+  gawk
+
+RUN chmod +x ./entrypoint.sh
+VOLUME ["/root/.cheat.sh/"]
+# ENTRYPOINT ["python3", "-u", "bin/srv.py"]
+ENTRYPOINT ["./entrypoint.sh"]
 CMD [""]

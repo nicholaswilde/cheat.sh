@@ -1,0 +1,14 @@
+---
+
+version: '3'
+
+tasks:
+  up:
+    desc: up
+    cmds:
+      - docker compose up
+  default:
+    desc: List commands
+    cmds:
+      - task -l
+    silent: true

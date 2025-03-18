@@ -12,6 +12,7 @@ services:
       - "8002:8002"
     volumes:
       - .:/app:Z
+      - cheatsh_data:/root/.cheat.sh
       # - ./upstream:/root/.cheat.sh/upstream/
     restart: always
   redis:
@@ -20,3 +21,4 @@ services:
       - redis_data:/data
 volumes:
   redis_data:
+  cheatsh_data:
