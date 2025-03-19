@@ -32,13 +32,12 @@ RUN echo "**** install packages ****" && \
 
 WORKDIR /app
 
-## copying
-# WORKDIR /app
 # COPY . /app
 
 COPY --from=dl /app /app
 COPY ./entrypoint.sh /app/entrypoint.sh
-COPY ./requirements.txt /app
+COPY ./requirements-mod.txt /app
+RUN cat ./requirements-mod.txt >> ./requirements.txt
 
 ## building missing python packages
 RUN apk add --no-cache --virtual build-deps py3-pip g++ python3-dev libffi-dev && \
