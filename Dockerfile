@@ -54,7 +54,6 @@ RUN \
   pip3 install --no-cache-dir --upgrade pygments && \
   pip3 install --no-cache-dir -r requirements.txt && \
   pip3 install --no-cache-dir git+https://github.com/aboSamoor/pycld2.git && \
-  apk del build-deps g++ && \
   mkdir -p /root/.cheat.sh/log/
 
 RUN \
@@ -65,6 +64,7 @@ RUN \
     bash \
     gawk && \
   echo "**** cleanup ****" && \
+  apk del build-deps g++ && \
   rm -rf /var/cache/apk/* * && \
   rm -rf /tmp/*
 
