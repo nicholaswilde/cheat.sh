@@ -15,7 +15,6 @@ WORKDIR /app
 FROM alpine:3.14 AS builder
 # https://rodneyosodo.medium.com/minimizing-python-docker-images-cf99f4468d39
 RUN apk add --update --no-cache \
-  tar \
   git \
   sed \
   libstdc++ \
