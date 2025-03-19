@@ -15,7 +15,8 @@ WORKDIR /app
 
 FROM alpine:3.14 AS builder
 # https://rodneyosodo.medium.com/minimizing-python-docker-images-cf99f4468d39
-RUN echo "**** install packages ****" && \
+RUN \
+  echo "**** install packages ****" && \
   apk add --update --no-cache \
     git \
     sed=4.8-r0 \
@@ -37,18 +38,22 @@ WORKDIR /app
 COPY --from=dl /app /app
 COPY ./entrypoint.sh /app/entrypoint.sh
 COPY ./requirements-mod.txt /app
-RUN sed -i 's/python-Levenshtein/python-Levenshtein==0.12.2/g' ./requirements.txt && \
+
+RUN \
+  sed -i 's/python-Levenshtein/python-Levenshtein==0.12.2/g' ./requirements.txt && \
   cat ./requirements-mod.txt >> ./requirements.txt
 
-## building missing python packages
-RUN apk add --no-cache --virtual build-deps py3-pip g++ python3-dev libffi-dev && \
+RUN \
+  echo "**** build missing python packages ****" && \
+  apk add --no-cache --virtual build-deps py3-pip g++ python3-dev libffi-dev && \
   pip3 install --no-cache-dir --upgrade pygments && \
   pip3 install --no-cache-dir -r requirements.txt && \
   pip3 install --no-cache-dir git+https://github.com/aboSamoor/pycld2.git && \
   apk del build-deps g++ && \
   mkdir -p /root/.cheat.sh/log/
 
-RUN echo "**** install server dependencies ****" && \
+RUN \
+  echo "**** install server dependencies ****" && \
   apk add --update --no-cache \
     py3-jinja2 \
     py3-flask \
