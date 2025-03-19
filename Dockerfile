@@ -37,7 +37,8 @@ WORKDIR /app
 COPY --from=dl /app /app
 COPY ./entrypoint.sh /app/entrypoint.sh
 COPY ./requirements-mod.txt /app
-RUN cat ./requirements-mod.txt >> ./requirements.txt
+RUN sed -i 's/python-Levenshtein/python-Levenshtein==0.12.2/g' requirements.txt && \
+  cat ./requirements-mod.txt >> ./requirements.txt
 
 ## building missing python packages
 RUN apk add --no-cache --virtual build-deps py3-pip g++ python3-dev libffi-dev && \
