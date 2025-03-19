@@ -40,6 +40,7 @@ COPY ./entrypoint.sh /app/entrypoint.sh
 COPY ./requirements-mod.txt /app/requirements-mod.txt
 
 RUN \
+  echo "**** update source files ****" && \
   sed -i 's/python-Levenshtein/python-Levenshtein==0.12.2/g' ./requirements.txt && \
   cat ./requirements-mod.txt >> ./requirements.txt
 
@@ -65,6 +66,9 @@ RUN \
     gawk && \
   echo "**** cleanup ****" && \
   apk del build-deps g++ && \
+  rm -rf \
+    /app/Dockerfile \
+    /app/requirements-mod.txt &&\
   rm -rf /var/cache/apk/* * && \
   rm -rf /tmp/*
 
