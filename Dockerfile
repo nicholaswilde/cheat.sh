@@ -37,7 +37,7 @@ WORKDIR /app
 
 COPY --from=dl /app /app
 COPY ./entrypoint.sh /app/entrypoint.sh
-COPY ./requirements-mod.txt /app
+COPY ./requirements-mod.txt /app/requirements-mod.txt
 
 RUN \
   sed -i 's/python-Levenshtein/python-Levenshtein==0.12.2/g' ./requirements.txt && \
