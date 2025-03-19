@@ -18,7 +18,7 @@ FROM alpine:3.14 AS builder
 RUN echo "**** install packages ****" && \
   apk add --update --no-cache \
     git \
-    sed \
+    sed=4.8-r0 \
     libstdc++ \
     pkgconf \
     py3-icu \
