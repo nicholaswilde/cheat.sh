@@ -1,7 +1,21 @@
+FROM alpine:3.14 AS dl
+WORKDIR /tmp
+ARG FILENAME="139f8c2fb348a7028a9bac5474ca20ea00b13543.tar.gz"
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
+RUN \
+  echo "**** install packages ****" && \
+  apk add --no-cache \
+    wget=1.21.1-r1 && \
+  echo "**** download cheat.sh ****" && \
+  mkdir /app && \
+  wget "https://github.com/chubin/cheat.sh/archive/${FILENAME}" && \
+  tar -xvf "${FILENAME}" -C /app --strip-components 1
+WORKDIR /app
+
 FROM alpine:3.14 AS builder
-# FROM python:alpine AS builder
 # https://rodneyosodo.medium.com/minimizing-python-docker-images-cf99f4468d39
 RUN apk add --update --no-cache \
+  tar \
   git \
   sed \
   libstdc++ \
@@ -15,33 +29,34 @@ RUN apk add --update --no-cache \
   py3-requests \
   py3-redis
 
-## copying
 WORKDIR /app
-COPY . /app
+
+## copying
+# WORKDIR /app
+# COPY . /app
+
+COPY --from=dl /app /app
+COPY ./entrypoint.sh /app/entrypoint.sh
+COPY ./requirements.txt /app
 
 ## building missing python packages
-RUN apk add --no-cache --virtual build-deps py3-pip g++ python3-dev libffi-dev \
-  && pip3 install --no-cache-dir --upgrade pygments \
-  && pip3 install --no-cache-dir -r requirements.txt \
-  && pip3 install --no-cache-dir git+https://github.com/aboSamoor/pycld2.git \
-  && apk del build-deps
-
-RUN mkdir -p /root/.cheat.sh/log/
-
-# FROM python:3.13.2-alpine3.21
-# WORKDIR /app
-# COPY --from=builder /app /app
-# COPY --from=builder /root/.cheat.sh /root/.cheat.sh
+RUN apk add --no-cache --virtual build-deps py3-pip g++ python3-dev libffi-dev && \
+  pip3 install --no-cache-dir --upgrade pygments && \
+  pip3 install --no-cache-dir -r requirements.txt && \
+  pip3 install --no-cache-dir git+https://github.com/aboSamoor/pycld2.git && \
+  apk del build-deps g++ && \
+  mkdir -p /root/.cheat.sh/log/
 
 # Install server dependencies
 RUN apk add --update --no-cache \
   py3-jinja2 \
   py3-flask \
   bash \
-  gawk
-
-RUN chmod +x ./entrypoint.sh
+  gawk && \
+  echo "**** cleanup ****" && \
+  rm -rf /var/cache/apk/* * && \
+  rm -rf /tmp/*
+VOLUME ["/app/etc/"]
 VOLUME ["/root/.cheat.sh/"]
-# ENTRYPOINT ["python3", "-u", "bin/srv.py"]
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
 CMD [""]
